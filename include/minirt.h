@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uzanchi <uzanchi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: crios <crios@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 14:58:21 by crios             #+#    #+#             */
-/*   Updated: 2025/04/26 17:33:34 by uzanchi          ###   ########.fr       */
+/*   Updated: 2025/04/28 20:15:49 by crios            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,15 @@
 
 typedef struct s_mlx
 {
-	void			*mlx; // MLX instance pointer (MLX initialization)
-	void			*win; // Window pointer (the window where image is drawn)
-	void			*img; // Image pointer (holds the image data for the scene)
-	char			*addr; // Image data address(for manipulation of pixel data)
-	int				width; // Width of the window (and image)
-	int				height; // Height of the window (and image)
-	int				bits_per_pixel; // Bits per pixel (image format)
-	int				line_length; // Length of a single row of pixels (in bytes)
-	int				endian; // Endianness of the image (used for pixel format)
+	void			*mlx;
+	void			*win;
+	void			*img;
+	char			*addr;
+	int				width;
+	int				height;
+	int				bits_per_pixel;
+	int				line_length;
+	int				endian;
 }					t_mlx;
 
 typedef struct s_Vec3

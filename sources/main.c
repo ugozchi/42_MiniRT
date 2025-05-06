@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uzanchi <uzanchi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: crios <crios@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 15:00:59 by crios             #+#    #+#             */
-/*   Updated: 2025/04/27 14:38:00 by uzanchi          ###   ########.fr       */
+/*   Updated: 2025/05/06 12:31:53 by crios            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,40 @@ static void	read_scene(int fd, t_Scene *scene)
 		process_line(line, i, scene);
 }
 
+// int	main(int argc, char **argv)
+// {
+// 	int		fd;
+// 	t_Scene	scene;
+
+// 	if (argc != 2)
+// 	{
+// 		print_error("Usage: ./miniRT <scene.rt>\n");
+// 		return (1);
+// 	}
+// 	fd = open(argv[1], O_RDONLY);
+// 	if (fd == -1)
+// 	{
+// 		perror("Error opening file");
+// 		return (1);
+// 	}
+// 	init_scene(&scene);
+// 	read_scene(fd, &scene);
+// 	close(fd);
+// 	start_window(&scene);
+// 	mlx_key_hook(scene.mlx.win, key_hook, &scene);
+// 	mlx_hook(scene.mlx.win, 17, 0, close_window, &scene);
+// 	render_scene(&scene);
+// 	mlx_loop(scene.mlx.mlx);
+// 	return (0);
+// }
+
 int	main(int argc, char **argv)
 {
-	int		fd;
-	t_Scene	scene;
+	int			fd;
+	t_Scene		scene;
 
-	if (argc != 2)
+	if (argc != 2 || !ft_strrchr(argv[1], '.')
+		|| ft_strcmp(ft_strrchr(argv[1], '.'), ".rt"))
 	{
 		print_error("Usage: ./miniRT <scene.rt>\n");
 		return (1);
@@ -101,47 +129,3 @@ int	main(int argc, char **argv)
 	mlx_loop(scene.mlx.mlx);
 	return (0);
 }
-
-// int	main(int argc, char **argv)
-// {
-// 	FILE	*file;
-// 	char	line[256];
-// 	t_Scene	scene;
-
-// 	init_scene(&scene);
-// 	if (argc != 2)
-// 	{
-// 		fprintf(stderr, "Usage: %s <scene.rt>\n", argv[0]);
-// 		return (1);
-// 	}
-// 	file = fopen(argv[1], "r");
-// 	if (!file)
-// 	{
-// 		perror("Error opening file");
-// 		return (1);
-// 	}
-// 	while (fgets(line, sizeof(line), file))
-// 	{
-// 		if (line[0] == 'A')
-// 			parse_ambient_light(line, &scene);
-// 		else if (line[0] == 'C')
-// 			parse_camera(line, &scene);
-// 		else if (line[0] == 'L')
-// 			parse_light(line, &scene);
-// 		else if (ft_strncmp(line, "sp", 2) == 0)
-// 			parse_sphere(line, &scene);
-// 		else if (ft_strncmp(line, "pl", 2) == 0)
-// 			parse_plane(line, &scene);
-// 		else if (ft_strncmp(line, "cy", 2) == 0)
-// 			parse_cylinder(line, &scene);
-// 		else
-// 			fprintf(stderr, "Warning: Unrecognized line format: %s", line);
-// 	}
-// 	fclose(file);
-// 	start_window(&scene);
-// 	mlx_key_hook(scene.mlx.win, key_hook, &scene);
-// 	mlx_hook(scene.mlx.win, 17, 0, close_window, &scene);
-// 	render_scene(&scene);
-// 	mlx_loop(scene.mlx.mlx);
-// 	return (0);
-// }

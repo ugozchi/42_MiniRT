@@ -6,7 +6,7 @@
 /*   By: crios <crios@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:22:09 by crios             #+#    #+#             */
-/*   Updated: 2025/04/16 19:23:45 by crios            ###   ########.fr       */
+/*   Updated: 2025/04/28 20:09:52 by crios            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	parse_plane_identifier(char **token)
 {
-	if (!*token || strcmp(*token, "pl") != 0)
+	if (!*token || ft_strcmp(*token, "pl") != 0)
 	{
 		printf("Error: Invalid plane format (missing 'pl' identifier)\n");
 		return (0);

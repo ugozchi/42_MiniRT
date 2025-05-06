@@ -8,6 +8,8 @@ BOLD="\033[1m"
 GREEN="\033[1;32m"
 RED="\033[1;31m"
 CYAN="\033[1;36m"
+YELLOW="\033[1;33m"
+MAGENTA="\033[1;35m"
 NC="\033[0m"
 
 describe_scene() {
@@ -36,8 +38,11 @@ describe_scene() {
 		pride.rt)
 			echo "🔎 Description : Scène custom avec plusieurs sphères colorées façon drapeau Pride 🌈"
 			;;
+		parsing.rt)
+			echo "🔎 Description : Scène valide pour tester le parsing. Ne doit pas planter, doit s'afficher correctement."
+			;;
 		error.rt)
-			echo "🔎 Description : Fichier invalide — votre programme doit afficher une erreur claire sans crasher."
+			echo "🔎 Description : Scène volontairement invalide pour tester les erreurs. Doit afficher une erreur mais lancer la scène."
 			;;
 		*)
 			echo "🔎 Description indisponible pour ce fichier."
@@ -45,51 +50,56 @@ describe_scene() {
 	esac
 }
 
+print_separator() {
+	echo -e "${MAGENTA}------------------------------------------------------------${NC}"
+}
+
 run_test() {
 	local file=$1
 	local expected=$2
 	local path="${MAPS_DIR}/${file}"
 
-	echo -e "${CYAN}Testing ${file}${NC}"
+	print_separator
+	echo -e "${CYAN}${BOLD}Testing ${file}${NC}"
 
 	if [ ! -f "$path" ]; then
-		echo -e "${RED}File not found: $path${NC}"
+		echo -e "${RED}❌ File not found: $path${NC}\n"
 		return
 	fi
 
-	$EXEC "$path" > /dev/null 2>&1 &
-	pid=$!
+	describe_scene "$file"
+	echo ""
+
+	# Afficher le contenu de la map
+	echo -e "${YELLOW}📄 Contenu de ${file}:${NC}"
+	cat "$path"
+	echo ""
+
+	# Lancer miniRT et capturer la sortie
+	output=$($EXEC "$path")
+	echo ""
+	echo -e "${MAGENTA}--- Sortie du programme ---${NC}"
+	echo "$output"
+	echo -e "${MAGENTA}---------------------------${NC}"
 
 	if [ "$expected" = "ok" ]; then
-		echo -e "→ Scene affichée pendant 10 secondes...\n"
-		describe_scene "$file"
-		echo ""
-
-		sleep 2
-
-		if ps -p $pid > /dev/null; then
-			kill $pid
-			wait $pid 2>/dev/null
-			status=$?
+		# Vérifier si la fenêtre a été créée
+		if echo "$output" | grep -q "Window created successfully"; then
+			echo -e "${GREEN}✅ PASSED (Scène lancée avec succès)${NC}\n"
 		else
-			status=0  # il s'est terminé tout seul proprement
+			echo -e "${RED}❌ FAILED (Pas de création de fenêtre détectée)${NC}\n"
 		fi
 	else
-		sleep 1
-		wait $pid 2>/dev/null
-		status=$?
-	fi
-
-	if [ "$expected" = "ok" ] && [ $status -eq 0 ]; then
-		echo -e "${GREEN}✔️ PASSED${NC}\n"
-	elif [ "$expected" = "fail" ] && [ $status -ne 0 ]; then
-		echo -e "${GREEN}✔️ PASSED (failed as expected)${NC}\n"
-	else
-		echo -e "${RED}❌ FAILED${NC}\n"
+		# Scène censée échouer → on attend une erreur
+		if echo "$output" | grep -qi "Error"; then
+			echo -e "${GREEN}✅ PASSED (Erreur détectée et scène lancée)${NC}\n"
+		else
+			echo -e "${RED}❌ FAILED (Aucune erreur détectée alors qu'attendue)${NC}\n"
+		fi
 	fi
 }
 
-# ========= Launch Tests =========
+# ========= Lancer les tests =========
 
 echo -e "${CYAN}${BOLD}🚀 Lancement des tests MiniRT...${NC}\n"
 
@@ -102,6 +112,9 @@ run_test sphere.rt ok
 run_test spheres.rt ok
 run_test pride.rt ok
 run_test 天宫.rt ok
-run_test error.rt ok
+run_test parsing.rt ok
+run_test error.rt fail
 
+print_separator
 echo -e "${CYAN}${BOLD}✅ Tous les tests sont terminés.${NC}"
+print_separator

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_sphere.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uzanchi <uzanchi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: crios <crios@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:21:19 by crios             #+#    #+#             */
-/*   Updated: 2025/04/26 17:28:44 by uzanchi          ###   ########.fr       */
+/*   Updated: 2025/04/28 20:10:17 by crios            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,11 @@ static int	parse_sphere_position(char *str, t_Vec3 *center)
 	tokens = ft_split(str, ',');
 	if (count_tokens(tokens) != 3)
 		return (free_tokens(tokens), 0);
-	success = parse_double(tokens[0], &center->x)
-		&& parse_double(tokens[1], &center->y)
-		&& parse_double(tokens[2], &center->z);
+	success = parse_double(tokens[0], &center->x);
+	if (success)
+		success = parse_double(tokens[1], &center->y);
+	if (success)
+		success = parse_double(tokens[2], &center->z);
 	free_tokens(tokens);
 	return (success);
 }
@@ -117,11 +119,10 @@ static int	parse_sphere_color(char *str, t_Vec3 *color)
 
 static int	fill_sphere_data(char **tokens, t_Sphere *sphere)
 {
-	if (count_tokens(tokens) != 4 || strcmp(tokens[0], "sp") != 0)
+	if (count_tokens(tokens) != 4 || ft_strcmp(tokens[0], "sp") != 0)
 		return (0);
 	if (!parse_sphere_position(tokens[1], &sphere->center)
-		|| !parse_double(tokens[2], &sphere->radius)
-		|| sphere->radius <= 0
+		|| !parse_double(tokens[2], &sphere->radius) || sphere->radius <= 0
 		|| !parse_sphere_color(tokens[3], &sphere->color))
 		return (0);
 	sphere->radius /= 2.0;
@@ -132,8 +133,8 @@ static int	add_sphere_to_scene(t_Scene *scene, t_Sphere *sphere)
 {
 	t_Sphere	*new_spheres;
 
-	new_spheres = realloc(scene->spheres,
-			sizeof(t_Sphere) * (scene->sphere_count + 1));
+	new_spheres = realloc(scene->spheres, sizeof(t_Sphere)
+			* (scene->sphere_count + 1));
 	if (!new_spheres)
 		return (0);
 	scene->spheres = new_spheres;

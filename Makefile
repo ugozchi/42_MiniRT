@@ -126,10 +126,14 @@ fclean: clean
 				@if [ -d ${LIBFT_DIR} ]; then \
 					echo "\n${CYAN}Running fclean for LIBFT${NC}"; \
 					make -s fclean -C ${LIBFT_DIR}; \
+					echo "${RED}Removing ${LIBFT_DIR}${NC}"; \
+					rm -rf ${LIBFT_DIR}; \
 				fi
 				@if [ -d ${LIBMLX_DIR} ]; then \
 					echo "\n${CYAN}Running clean for LIBMLX${NC}"; \
 					make -s clean -C ${LIBMLX_DIR}; \
+					echo "${RED}Removing ${LIBMLX_DIR}${NC}"; \
+					rm -rf ${LIBMLX_DIR}; \
 				fi
 				@if [ ! -f "${NAME}" ]; then \
 					echo "\n${YELLOW}No binary ${NAME} to remove${NC}"; \
@@ -149,7 +153,7 @@ project_logo:
 	@echo "$(ROSE)   ██║╚██╔╝██║██║██║╚██╗██║██║██╔██═╝    ██║      $(NC)"
 	@echo "$(ROSE)   ██║ ╚═╝ ██║██║██║ ╚████║██║██║ ██╚╗   ██║      $(NC)"
 	@echo "$(ROSE)   ╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝   ╚═╝      $(NC)"
-	@echo "		a 42 Project by Rios Corentin & ZANCHI Ugo"
+	@echo "		a 42 Project by RIOS Corentin & ZANCHI Ugo"
 
 entry_message:
 				@echo "${CYAN}\nCOMPILING $$(echo ${NAME} | tr '[:lower:]' '[:upper:]')\n${NC}${BOLD}Compiling necessary .o files out of $(SRC_NR) files${NC}"

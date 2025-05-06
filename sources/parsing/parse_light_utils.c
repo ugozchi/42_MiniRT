@@ -6,7 +6,7 @@
 /*   By: crios <crios@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 13:33:44 by crios             #+#    #+#             */
-/*   Updated: 2025/04/16 19:29:32 by crios            ###   ########.fr       */
+/*   Updated: 2025/04/28 20:09:33 by crios            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	parse_light_identifier(char **token)
 {
-	if (!*token || strcmp(*token, "L") != 0)
+	if (!*token || ft_strcmp(*token, "L") != 0)
 	{
 		printf("Error: Invalid light format (missing 'L' identifier)\n");
 		return (0);

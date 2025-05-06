@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uzanchi <uzanchi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: crios <crios@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 12:26:40 by crios             #+#    #+#             */
-/*   Updated: 2025/04/27 12:51:41 by uzanchi          ###   ########.fr       */
+/*   Updated: 2025/04/28 20:10:28 by crios            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ int	parse_color(char *str, int *r, int *g, int *b)
 	char	*comma2;
 	char	*endptr;
 
-	comma1 = strchr(str, ',');
+	comma1 = ft_strchr(str, ',');
 	if (!comma1)
 		return (0);
-	comma2 = strchr(comma1 + 1, ',');
+	comma2 = ft_strchr(comma1 + 1, ',');
 	if (!comma2)
 		return (0);
 	*comma1 = '\0';

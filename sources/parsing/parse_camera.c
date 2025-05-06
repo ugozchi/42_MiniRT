@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_camera.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uzanchi <uzanchi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: crios <crios@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:23:34 by crios             #+#    #+#             */
-/*   Updated: 2025/04/26 17:03:33 by uzanchi          ###   ########.fr       */
+/*   Updated: 2025/04/28 20:09:09 by crios            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 // 	if (token_count != 4 || strcmp(tokens[0], "C") != 0)
 // 	{
 // 		printf("Error: Invalid camera format.
-//				  Expected: C x,y,z dx,dy,dz fov\n");
+//					Expected: C x,y,z dx,dy,dz fov\n");
 // 		free_tokens(tokens);
 // 		return ;
 // 	}
@@ -92,9 +92,11 @@ static int	parse_position(char *token, t_Vec3 *position)
 	pos_tokens = ft_split(token, ',');
 	if (count_tokens(pos_tokens) != 3)
 		return (free_tokens(pos_tokens), 0);
-	success = parse_double(pos_tokens[0], &position->x)
-		&& parse_double(pos_tokens[1], &position->y)
-		&& parse_double(pos_tokens[2], &position->z);
+	success = parse_double(pos_tokens[0], &position->x);
+	if (success)
+		success = parse_double(pos_tokens[1], &position->y);
+	if (success)
+		success = parse_double(pos_tokens[2], &position->z);
 	free_tokens(pos_tokens);
 	return (success);
 }
@@ -108,14 +110,15 @@ static int	parse_orientation(char *token, t_Vec3 *orientation)
 	orient_tokens = ft_split(token, ',');
 	if (count_tokens(orient_tokens) != 3)
 		return (free_tokens(orient_tokens), 0);
-	success = parse_double(orient_tokens[0], &orientation->x)
-		&& parse_double(orient_tokens[1], &orientation->y)
-		&& parse_double(orient_tokens[2], &orientation->z);
+	success = parse_double(orient_tokens[0], &orientation->x);
+	if (success)
+		success = parse_double(orient_tokens[1], &orientation->y);
+	if (success)
+		success = parse_double(orient_tokens[2], &orientation->z);
 	if (success)
 	{
-		length = sqrt(orientation->x * orientation->x
-				+ orientation->y * orientation->y
-				+ orientation->z * orientation->z);
+		length = sqrt(orientation->x * orientation->x + orientation->y
+				* orientation->y + orientation->z * orientation->z);
 		if (fabs(length - 1.0) > 0.0001)
 			success = 0;
 	}
@@ -131,11 +134,10 @@ void	parse_camera(char *line, t_Scene *scene)
 	tokens = ft_split_whitespace(line);
 	if (!tokens)
 		return ((void)printf("Error: Memory allocation failed\n"));
-	if (count_tokens(tokens) != 4 || strcmp(tokens[0], "C") != 0
+	if (count_tokens(tokens) != 4 || ft_strcmp(tokens[0], "C") != 0
 		|| !parse_position(tokens[1], &scene->camera.position)
 		|| !parse_orientation(tokens[2], &scene->camera.orientation)
-		|| !parse_double(tokens[3], &fov)
-		|| fov < 0.0 || fov > 180.0)
+		|| !parse_double(tokens[3], &fov) || fov < 0.0 || fov > 180.0)
 	{
 		printf("Error: Invalid camera format\n");
 		free_tokens(tokens);
